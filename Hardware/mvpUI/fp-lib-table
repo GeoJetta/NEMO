@@ -1,0 +1,7 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "phone")(type "KiCad")(uri "C:/Users/geoje/OneDrive - Cal Poly/School - Work/Projects/phone/V2/library/phone.pretty")(options "")(descr ""))
+  (lib (name "phoneLib")(type "KiCad")(uri "${KIPRJMOD}/phoneLib/phoneLib.pretty/phoneLib.pretty")(options "")(descr ""))
+  (lib (name "BM02B-ACHLKS")(type "KiCad")(uri "C:/Users/geoje/OneDrive - Cal Poly/School - Work/Projects/phone/V2/library/BM02B-ACHLKS.pretty")(options "")(descr ""))
+  (lib (name "PTS830GM140")(type "KiCad")(uri "C:/Users/geoje/OneDrive - Cal Poly/School - Work/Projects/phone/V2/library/PTS830GM140/footprints.pretty")(options "")(descr ""))
+)

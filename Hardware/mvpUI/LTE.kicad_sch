@@ -1,0 +1,35 @@
+(kicad_sch (version 20230121) (generator eeschema)
+
+  (uuid 810747e2-39dc-4970-ba8f-8e3ffb251d9d)
+
+  (paper "A4")
+
+  (lib_symbols
+  )
+
+
+  (hierarchical_label "PCM[0..3]" (shape input) (at 46.355 83.185 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 035a43be-fa70-4b19-94d3-f734d842b8a2)
+  )
+  (hierarchical_label "I2C[0..1]" (shape input) (at 46.355 69.85 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 7d913753-41b9-4db7-9df5-48b258e07274)
+  )
+  (hierarchical_label "UART1[0..6]" (shape input) (at 46.355 78.74 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 92a2d55b-cc32-472f-81f2-bc5ff7f778eb)
+  )
+  (hierarchical_label "SPI[0..2]" (shape input) (at 46.355 65.405 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid 9387d361-334f-46bc-bcdb-2df563e1915c)
+  )
+  (hierarchical_label "USIM[0..5]" (shape input) (at 46.355 92.075 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid a1535c5a-205d-4f28-ac72-2ee4dd027dc2)
+  )
+  (hierarchical_label "USB[0..1]" (shape input) (at 46.355 87.63 0) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid e0dd073a-09a3-4e81-8b05-70f59af3da2a)
+  )
+)
