@@ -1492,7 +1492,7 @@
     (property "Value" "snap_dome" (at 71.12 102.87 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "snap dome:snap dome_1" (at 71.12 113.03 0)
+    (property "Footprint" "snap dome:snap dome_2" (at 71.12 113.03 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (at 71.12 113.03 0)
