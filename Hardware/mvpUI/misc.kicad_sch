@@ -914,7 +914,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 118.11 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 11ccd4b7-68ff-4578-bcf0-82887286b372)
     (property "Reference" "SW5" (at 118.11 63.5 0)
       (effects (font (size 1.27 1.27)))
@@ -970,7 +970,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 128.27 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 1b86898a-8323-41d5-a64d-fbf730364850)
     (property "Reference" "SW18" (at 128.27 45.72 0)
       (effects (font (size 1.27 1.27)))
@@ -1053,7 +1053,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 93.98 88.9 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2e7d3907-101e-46c8-aa13-5095c44765ae)
     (property "Reference" "SW7" (at 93.98 81.28 0)
       (effects (font (size 1.27 1.27)))
@@ -1137,7 +1137,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 93.98 107.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 467d9284-3824-451e-9a97-437efb80d404)
     (property "Reference" "SW10" (at 93.98 100.33 0)
       (effects (font (size 1.27 1.27)))
@@ -1195,7 +1195,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 105.41 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 59137d0d-7aee-44cf-9b4b-78d659af3751)
     (property "Reference" "SW17" (at 105.41 45.72 0)
       (effects (font (size 1.27 1.27)))
@@ -1342,7 +1342,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 71.12 127 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8eb7992a-269e-4009-902b-6f3610d100e3)
     (property "Reference" "SW12" (at 71.12 119.38 0)
       (effects (font (size 1.27 1.27)))
@@ -1368,7 +1368,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 62.23 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 907867d2-4f9c-4709-b828-a7782c417768)
     (property "Reference" "SW15" (at 62.23 45.72 0)
       (effects (font (size 1.27 1.27)))
@@ -1458,7 +1458,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 71.12 88.9 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9e25d926-78e9-421c-a5af-c3c1c1541ed1)
     (property "Reference" "SW6" (at 71.12 81.28 0)
       (effects (font (size 1.27 1.27)))
@@ -1484,7 +1484,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 71.12 107.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 9ecff0b5-3cb3-4bdb-aaba-19cd85726556)
     (property "Reference" "SW9" (at 71.12 100.33 0)
       (effects (font (size 1.27 1.27)))
@@ -1542,7 +1542,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 93.98 127 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid aa69fba8-9571-4249-b26a-71875f75dcba)
     (property "Reference" "SW13" (at 93.98 119.38 0)
       (effects (font (size 1.27 1.27)))
@@ -1664,7 +1664,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 118.11 88.9 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b20af515-0451-403e-ac6e-f8bbfaff9c8a)
     (property "Reference" "SW8" (at 118.11 81.28 0)
       (effects (font (size 1.27 1.27)))
@@ -1690,7 +1690,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 118.11 107.95 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid b9d6ba7f-7fca-47f2-8853-0ceaa314c5eb)
     (property "Reference" "SW11" (at 118.11 100.33 0)
       (effects (font (size 1.27 1.27)))
@@ -1748,7 +1748,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 118.11 127 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c620b9dc-755e-48fe-85ba-97a17bcfddf5)
     (property "Reference" "SW14" (at 118.11 119.38 0)
       (effects (font (size 1.27 1.27)))
@@ -1774,7 +1774,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 83.82 53.34 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d4b2735d-e536-4864-9449-6878097829f6)
     (property "Reference" "SW16" (at 83.82 45.72 0)
       (effects (font (size 1.27 1.27)))
@@ -1800,7 +1800,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 93.98 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid e3e92f71-1956-4858-b96a-a5360a58a3b1)
     (property "Reference" "SW4" (at 93.98 63.5 0)
       (effects (font (size 1.27 1.27)))
@@ -1916,7 +1916,7 @@
   )
 
   (symbol (lib_id "snap dome:snap_dome") (at 71.12 71.12 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid fe8627ab-1ad9-4d18-9144-89bfd9fea4e1)
     (property "Reference" "SW3" (at 71.12 63.5 0)
       (effects (font (size 1.27 1.27)))
