@@ -492,7 +492,7 @@
       "netlist": "",
       "specctra_dsn": "",
       "step": "",
-      "vrml": ""
+      "vrml": "mvpUI.wrl"
     },
     "page_layout_descr_file": "default.kicad_wks"
   },
