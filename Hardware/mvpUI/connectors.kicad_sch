@@ -2615,7 +2615,7 @@
     (property "Reference" "C32" (at 134.62 30.48 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "100nF" (at 134.62 33.02 0)
+    (property "Value" "0.1uF" (at 134.62 33.02 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Footprint" "Capacitor_SMD_US_Handsoldering_AKL:C_0603_1608Metric" (at 129.8448 27.94 0)
