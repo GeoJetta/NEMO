@@ -15,7 +15,7 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 |8     |VA          |VCOM Inverse         |
 |9     |VDD1        |3.3V         |
 |10    |VSS         |GND         |
-|11    |BSP         |Binary (Horizontal) Start         |
+|11    |BSP         |Binary (Horizontal) Start      |
 |12    |BCK         |Binary Clock         |
 |13    |R[0]        |Red Odd         |
 |14    |R[1]        |Red Even         |
@@ -23,11 +23,11 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 |16    |G[1]        |Green Even         |
 |17    |B[0]        |Blue Odd         |
 |18    |B[1]        |Blue Even         |
-|20    |VCOM        |Alternating Square Wave Signal         |
+|20    |VCOM        |Alternating Square Wave Signal |
 
 There are 18 used pins on the 21-pin display connector, of which 2 are power (5V/3.3V), 1 ground, and 3 reserved for VCOM and its equal and inverse signal counterparts VB and VA, respectively. We'll look at startup/shutdown sequence where these matter but for now they can be overlooked, with VCOM just being a consistent 60Hz(ish) square wave that in some way keeps the display running.
 
-Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd). Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique setup of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces.
+Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd). Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique setup of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each).
 
 ![Pixel Layout](image-5.png)
 
@@ -39,7 +39,7 @@ The "outer loop" of updating each frame is in the vertical movement signaling as
 
 Looking at the clock/control signals here, the display update is first triggered when INTB has a rising edge (and it has a corresponding dip a half cycle before the display update ends). GSP fires for a full GCK cycle at the start of each new display update. Gate Enable (GEN) pulls high during each stable point in GCK.
 
-At the 642nd GCK pulse, everything goes stable for 6 cycles as seen in the figure.
+At the 642nd GCK pulse (once all lines have been sent), everything goes stable for 6 cycles as seen in the figure.
 
 ![Vertical Signal Timing](image.png)
 
@@ -47,7 +47,7 @@ At the 642nd GCK pulse, everything goes stable for 6 cycles as seen in the figur
 
 ## Horizontal Signal
 
-Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK) is around 0.75MHz which is faster than I would have thought but makes sense considering it ticks for every pixel (probably warranted more careful trace design for the prototype but we can always run it slower for now if it's an issue... something to keep in mind). Each full horizontal cycle delivers one period of MSB bits and another of LSB bits for the full line. Once we have that part in our minds, it's probably the simpler part of the protocol. Each BCK cycle moves over one pixel, with BSP triggered high at the start of each line for a period of a full BCK cycle.
+Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK) is around 750kHz - faster than I would have thought but makes sense considering it ticks for every pixel (probably warranted more careful trace design for the prototype but we can always run it slower for now if it's an issue... something to keep in mind. Also a 748kHz oscillator might be helpful but we might be able to boost that from our LSO). Each full horizontal cycle delivers one period of MSB bits and another of LSB bits for the full line. Once we have that part in our minds, it's probably the simpler part of the protocol. Each BCK cycle moves over one pixel, with BSP triggered high at the start of each line for a period of a full BCK cycle.
 
 ![Horizontal Signal Timing](image-1.png)
 
@@ -55,7 +55,7 @@ Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK
 
 ## Partial Update
 
-If we only want to update some of the horizontal lines, there's a protocol provided for skipping through faster vertically.
+If we only want to update some of the horizontal lines, there's a protocol provided for skipping through faster vertically. To do that, we set all horizontal and vertical components inactive except for GCK which can traverse vertically at a maximum of 500kHz.
 
 ![Partial Update Signal Timing](image-4.png)
 
@@ -65,4 +65,18 @@ There are a couple other things we have to keep in mind, mainly transitioning be
 
 ![Mode Change Signal Timing](image-6.png)
 
+## Startup Sequence
+
+Some things to note are that the 5v supply must be turned on after the 3.2V one, and turned off before turning the lower voltage off. That can probably be handled in a safe easy way in Rust.
+
 ![Power On Sequence](image-7.png)
+
+After >2 GCK cycles' time of being turned on has passed, an all black frame should be sent, and VCOM (preceded by VA) can start after 30 microseconds. After one full cycle, the display is in normal on mode.
+
+## Power Off
+
+Essentially the same sequence takes place in reverse, except we write the display black, then turn off VCOM and derivatives, then turn off power after 30 microseconds have passed. Will need to look into safe shutdown when battery/power is removed.
+
+## Conclusion
+
+These are most of the parts that I found confusing to grok from just going through the datasheet initially, and it's really just mostly assembling these few diagrams from that document. Of course, there are more details that should be found there like rise times that we'll have to look at more carefully.
