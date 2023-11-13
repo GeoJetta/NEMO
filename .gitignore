@@ -40,3 +40,5 @@ gerbers/
 # User Machine Specific
 *-backups/
 *.kicad_prl
+
+Firmware/
