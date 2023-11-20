@@ -27,7 +27,7 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 
 There are 18 used pins on the 21-pin display connector, of which 2 are power (5V/3.2V), 1 ground, and 3 reserved for VCOM and its equal and inverse signal counterparts VB and VA, respectively. We'll look at startup/shutdown sequence where these matter but for now they can be overlooked, with VCOM just being a consistent 60Hz(ish) square wave that in some way keeps the display running.
 
-Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, each cycle first provides half the information (MSB) for 2 horizontal pixels (even and odd). Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique structure of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each, 6bpp).
+Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, at first each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd, from e.g. R[0] and R[1]) at a time. Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique structure of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each, 6bpp).
 
 ![Pixel Layout](image-5.png)
 
@@ -58,6 +58,10 @@ Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK
 If we only want to update some of the horizontal lines, there's a protocol provided for skipping through faster vertically. To do that, we set all horizontal and vertical components inactive except for GCK which can traverse vertically at a maximum of 500kHz.
 
 ![Partial Update Signal Timing](image-4.png)
+
+Expounding upon the note from earlier, according to what I can tell from the docs the partial frame update can happen a lot faster. Here's a rough estimate graph showing number of lines written to the display out of the total 320 vs. framerate. So under many conditions (writing text or pressing a button) where we're only writing a few lines, we can push the display to a much more user-friendly 30Hz+. This calculation lumps the intervals at the start and end of frame into the written frame timing so it overestimates framerate tending towards zero.
+
+![Partial Update Framerate Estimate](image-9.png)
 
 ## Pulling It All Together
 
