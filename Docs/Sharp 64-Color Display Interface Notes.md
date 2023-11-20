@@ -13,7 +13,7 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 |6     |INTB        |Gate/Binary Initial?  |
 |7     |VB          |VCOM         |
 |8     |VA          |VCOM Inverse         |
-|9     |VDD1        |3.3V         |
+|9     |VDD1        |3.2V         |
 |10    |VSS         |GND         |
 |11    |BSP         |Binary (Horizontal) Start      |
 |12    |BCK         |Binary Clock         |
@@ -25,13 +25,13 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 |18    |B[1]        |Blue Even         |
 |20    |VCOM        |Alternating Square Wave Signal |
 
-There are 18 used pins on the 21-pin display connector, of which 2 are power (5V/3.3V), 1 ground, and 3 reserved for VCOM and its equal and inverse signal counterparts VB and VA, respectively. We'll look at startup/shutdown sequence where these matter but for now they can be overlooked, with VCOM just being a consistent 60Hz(ish) square wave that in some way keeps the display running.
+There are 18 used pins on the 21-pin display connector, of which 2 are power (5V/3.2V), 1 ground, and 3 reserved for VCOM and its equal and inverse signal counterparts VB and VA, respectively. We'll look at startup/shutdown sequence where these matter but for now they can be overlooked, with VCOM just being a consistent 60Hz(ish) square wave that in some way keeps the display running.
 
-Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd). Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique setup of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each).
+Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, each cycle first provides half the information (MSB) for 2 horizontal pixels (even and odd). Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique structure of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each, 6bpp).
 
 ![Pixel Layout](image-5.png)
 
-The display also allows for partial updating, essentially just skipping horizontal lines that don't need to be updated.
+The display also allows for partial updating, essentially fast-forwarding through horizontal lines that don't need to be updated. In theory this means partial screen refresh rate could be faster than the 18Hz specified for the whole screen.
 
 ## Vertical Signal
 
@@ -47,7 +47,7 @@ At the 642nd GCK pulse (once all lines have been sent), everything goes stable f
 
 ## Horizontal Signal
 
-Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK) is around 750kHz - faster than I would have thought but makes sense considering it ticks for every pixel (probably warranted more careful trace design for the prototype but we can always run it slower for now if it's an issue... something to keep in mind. Also a 748kHz oscillator might be helpful but we might be able to boost that from our LSO). Each full horizontal cycle delivers one period of MSB bits and another of LSB bits for the full line. Once we have that part in our minds, it's probably the simpler part of the protocol. Each BCK cycle moves over one pixel, with BSP triggered high at the start of each line for a period of a full BCK cycle.
+Here we are zooming in on one single GCK cycle. The horizontal clock signal (BCK) is around 750kHz - faster than I would have thought but makes sense considering it ticks for every pixel (probably warranted more careful trace design for the prototype but we can always run it slower for now if it's an issue... something to keep in mind. Also an Nx748kHz oscillator might be helpful but we might be able to boost that from our LSO). Each full horizontal cycle delivers one period of MSB bits and another of LSB bits for the full line. Once we have that part in our minds, it's probably the simpler part of the protocol. Each BCK cycle moves over one pixel, with BSP triggered high at the start of each line for a period of a full BCK cycle.
 
 ![Horizontal Signal Timing](image-1.png)
 
@@ -80,3 +80,9 @@ Essentially the same sequence takes place in reverse, except we write the displa
 ## Conclusion
 
 These are most of the parts that I found confusing to grok from just going through the datasheet initially, and it's really just mostly assembling these few diagrams from that document. Of course, there are more details that should be found there like rise times that we'll have to look at more carefully.
+
+## Software Implementation
+
+- Initialize and shutdown should be automatically run at startup and shutdown.
+- Framebuffer Size: 6bpp x 320 x 240 = 57.6kB
+- Without lower level optimization, each pixel will likely be at least one byte (or four) - 76.8kB or an imposing 307.2kB framebuffer. Let's shoot for at least the former.
