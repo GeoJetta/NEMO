@@ -62,6 +62,7 @@ If we only want to update some of the horizontal lines, there's a protocol provi
 Expounding upon the note from earlier, according to what I can tell from the docs the partial frame update can happen a lot faster. Here's a rough estimate graph showing number of lines written to the display out of the total 320 vs. framerate. So under many conditions (writing text or pressing a button) where we're only writing a few lines, we can push the display to a much more user-friendly 30Hz+. This calculation lumps the intervals at the start and end of frame into the written frame timing so it overestimates framerate tending towards zero.
 
 ![Partial Update Framerate Estimate](image-9.png)
+*Typo - X axis should read "# of **lines** written per frame"
 
 ## Pulling It All Together
 
