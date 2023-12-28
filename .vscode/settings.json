@@ -1,5 +1,10 @@
 {
     "cSpell.ignoreWords": [
         "framebuffer"
+    ],
+    "cSpell.words": [
+        "datasheet",
+        "INTB",
+        "VCOM"
     ]
 }

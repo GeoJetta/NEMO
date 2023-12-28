@@ -17,17 +17,17 @@ Sharp 64-Color Display(s) (currently I am only aware of the one) use a 6-bit par
 |10    |VSS         |GND         |
 |11    |BSP         |Binary (Horizontal) Start      |
 |12    |BCK         |Binary Clock         |
-|13    |R[0]        |Red Odd         |
-|14    |R[1]        |Red Even         |
-|15    |G[0]        |Green Odd         |
-|16    |G[1]        |Green Even         |
-|17    |B[0]        |Blue Odd         |
-|18    |B[1]        |Blue Even         |
+|13    |R\[0]        |Red Odd         |
+|14    |R\[1]        |Red Even         |
+|15    |G\[0]        |Green Odd         |
+|16    |G\[1]        |Green Even         |
+|17    |B\[0]        |Blue Odd         |
+|18    |B\[1]        |Blue Even         |
 |20    |VCOM        |Alternating Square Wave Signal |
 
 There are 18 used pins on the 21-pin display connector, of which 2 are power (5V/3.2V), 1 ground, and 3 reserved for VCOM and its equal and inverse signal counterparts VB and VA, respectively. We'll look at startup/shutdown sequence where these matter but for now they can be overlooked, with VCOM just being a consistent 60Hz(ish) square wave that in some way keeps the display running.
 
-Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, at first each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd, from e.g. R[0] and R[1]) at a time. Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique structure of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each, 6bpp).
+Besides the arbitrary VCOM signal things seem pretty normal so far. Since the module uses 2 bits per color and therefore 6bpp, you would intuitively expect the 6 parallel signals to represent a single pixel per cycle. And, you'd be ***very wrong***. Instead, at first each cycle provides half the information (MSB) for 2 horizontal pixels (even and odd, from e.g. R\[0] and R\[1]) at a time. Once half the color information for the whole line has been written, you send the other half (LSB) and then drop down a line and repeat. I'm guessing this seemingly strange way of writing to the display is down to the unique structure of the LCD, but maybe this is a common way to set things up for RGB parallel interfaces. Since the MSB controls 2/3 of each pixel and LSB 1/3, that gives 4 levels of color (2 bits each, 6bpp).
 
 ![Pixel Layout](image-5.png)
 
@@ -91,3 +91,55 @@ These are most of the parts that I found confusing to grok from just going throu
 - Initialize and shutdown should be automatically run at startup and shutdown.
 - Framebuffer Size: 6bpp x 320 x 240 = 57.6kB
 - Without lower level optimization, each pixel will likely be at least one byte (or four) - 76.8kB or an imposing 307.2kB framebuffer. Let's shoot for at least the former.
+
+## Timing Events Table
+
+At the finest timing grid resolution, all signal edges line up with a 3Mhz clock (or a tiny bit less, that's 333.3ns vs the recommended 335, but there is margin down to 330ns). This means we can just run a counter at this frequency and update edges at preprogrammed locations. I'll attempt to list all these events chronologically so that the FSM case statements are simply copy-paste constants.
+
+### Horizontal Timing Table
+
+|Cycle #  |Pin  |High/Low  | Constant Def |
+|---------|---------|---------|---------|
+|0        |INTB     |High     | FIRST_CYCLE = 0 |
+|65 (>62) |GSP      |High     | GSP_CYC_1 = 65  |
+|195 (>190)|GCK     |High (Toggle)     | GCK_CYC_1 = 195 |
+|... | | | Missed a GCK cycle here. Add 248.
+|196 |BSP     |High   | BSP_CYC_1 = GCK_CYC_1 + 1 |
+|197 |BCK     |High   | BCK_CYC_1 = BSP_CYC_1 + 1 |
+|198     |DATA        |DATA         | DATA_CYC_1 = BCK_CYC_1 + 1 |
+|199     |BCK         |Low         | BCK_CYC_1d = BCK_CYC_1 + 2 |
+|200     |DATA + BSP  |DATA + Low  | DATA_CYC_2 = DATA_CYC_1 + 2 = BSP_LOW |
+|201     |BCK         |High         |
+|202     |DATA        |DATA         |
+|...     |...         |...         |
+|246     |DATA + GEN  |DATA + High | GEN_CYC_H = GCK_CYC_1 + 51
+|...     |...         |...         |
+|323     |GSP  |Low | --Note: This is on second GCK cycle.
+|...     |...         |...         |
+|393     |DATA + GEN  |DATA + High | GEN_CYC_L = GCK_CYC_2 - 51
+|...     |...         |...         |
+|438     |DATA        |DATA     | LAST_DATA_CYC = DATA_CYC_1 + 240 |
+|439     |BCK         |Low         |
+|...     |...         |...         |
+|443     |GCK         |High (Toggle)   | GCK_CYC_2 = GCK_CYC_1 + 248 Think I'm off by one somewhere here. |
+
+### Vertical Timing Table
+
+|GCK Cycle #  |Pin  |High/Low  | Constant Def |
+|---------|---------|---------|---------|
+|1.5        |GSP     |Low     |
+|2        |GEN Start     |High     |
+|641  | DATA Last
+|642  |GEN Last
+|646  |INTB | Low
+|648  |Restart
+
+## States
+
+The display module really only has a few possible higher level states and distinct transitions between them.
+
+Power Off -> Initialize (Black Frame) -> Hold -> Active
+
+And the reverse.
+
+During active frames, partial update can also happen which should be its own state.
