@@ -42,4 +42,4 @@ gerbers/
 *.kicad_prl
 
 Firmware/*
-!Firmware/ls021b7dd02
+!Firmware/icesugar-nano-vhdl
