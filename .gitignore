@@ -41,4 +41,5 @@ gerbers/
 *-backups/
 *.kicad_prl
 
-Firmware/
+Firmware/*
+!Firmware/ls021b7dd02
