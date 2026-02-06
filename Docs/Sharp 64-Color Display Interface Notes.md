@@ -143,3 +143,12 @@ Power Off -> Initialize (Black Frame) -> Hold -> Active
 And the reverse.
 
 During active frames, partial update can also happen which should be its own state.
+
+## Code Output
+![Overall VHDL Waveform](wave-overall.png)
+Here's my implementation of a driver in VHDL (found in the Firmware directory). Here's an overall view of the pin outputs and select variables in the program over time when sending a blank frame.
+![Half Frame VHDL Waveform](wave-halfcycle.png)
+Here you can see the mid-speed signals over one frame.
+![Single Line VHDL Waveform](wave-frame.png)
+Here's the signals when sending just a single line. Each of these shots shows a level of detail of the continuous waveform.
+
